@@ -1,4 +1,8 @@
+// ignore_for_file: unused_local_variable, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:recipies_app/services/auth_service.dart';
+import 'package:status_alert/status_alert.dart';
 
 // ignore: use_key_in_widget_constructors
 class LoginPage extends StatefulWidget {
@@ -51,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginForm() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.90,
-      height: MediaQuery.of(context).size.height * 0.30,
+      height: MediaQuery.of(context).size.height * 0.50,
       child: Form(
         key: _loginFormKey,
         child: Column(
@@ -86,12 +90,25 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _loginButton() {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.90,
+      width: MediaQuery.of(context).size.width * 0.30,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           if (_loginFormKey.currentState?.validate() ?? false) {
             _loginFormKey.currentState?.save();
-            debugPrint('Username: $_username, Password: $_password');
+            bool result = await AuthService().login(_username!, _password!);
+
+            if (result) {
+              Navigator.pushReplacementNamed(context, '/home');
+            } else {
+              StatusAlert.show(
+                context,
+                duration: const Duration(seconds: 3),
+                title: 'Login failed',
+                subtitle: 'Please try again!',
+                configuration: const IconConfiguration(icon: Icons.error_outline_outlined),
+                maxWidth: 260,
+              );
+            }
           }
         },
         child: const Text('Login'),
