@@ -19,12 +19,13 @@ class RecipePage extends StatelessWidget {
   }
 
   Widget _buildUI(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
+    return SingleChildScrollView(
       child: Column(
         children: [
           _recipeImage(context),
           _recipeDetails(context),
+          _recipeIngredients(context),
+          _recipeInstructions(context),
         ],
       ),
     );
@@ -44,18 +45,79 @@ class RecipePage extends StatelessWidget {
   }
 
   Widget _recipeDetails(BuildContext context) {
-    return const SizedBox(
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.sizeOf(context).width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 24),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Italian Easy'),
           Text(
-            'Classic Margheriti Pizza',
-            style: TextStyle(color: Colors.black, fontSize: 25),
+            '${recipe.cuisine}, ${recipe.difficulty}',
+            style: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          Text(
+            recipe.name,
+            style: const TextStyle(
+              fontSize: 30.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            'Prep Time: ${recipe.name} Minutes | Cook Time: ${recipe.cookTimeMinutes} Minutes',
+            style: const TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          Text(
+            '${recipe.rating.toString()} 🌟 | ${recipe.reviewCount} Reviews',
+            style: const TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _recipeIngredients(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.sizeOf(context).width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      child: Column(
+          children: recipe.ingredients
+              .map(
+                (i) => Row(children: [const Icon(Icons.check_box), Text(i)]),
+              )
+              .toList()),
+    );
+  }
+
+  Widget _recipeInstructions(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      width: MediaQuery.sizeOf(context).width,
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+      child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: recipe.instructions
+              .map((i) => Text('${recipe.instructions.indexOf(i) + 1}. $i',
+                  maxLines: 3,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w300,
+                  )))
+              .toList()),
     );
   }
 }
