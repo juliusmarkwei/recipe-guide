@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:recipies_app/services/data_service.dart';
 import 'package:recipies_app/models/recipe.dart';
+import 'package:recipies_app/pages/recipe_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -93,7 +94,14 @@ class _HomeState extends State<Home> {
               if (snapshot.data == null) return const SizedBox();
               Recipe recipe = snapshot.data![index];
               return ListTile(
-                onTap: () {},
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecipePage(
+                      recipe: recipe,
+                    ),
+                  ),
+                ),
                 contentPadding: EdgeInsets.only(top: 20),
                 isThreeLine: true,
                 subtitle: Text(
